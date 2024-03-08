@@ -4,7 +4,6 @@ import faulthandler
 import os
 
 import yaml
-from icecream import install
 from sklearn.svm import SVC, SVR
 from torch.nn import *  # do not remove
 from torch.optim import *  # do not remove
@@ -32,7 +31,6 @@ from trainers.onehot_parapred_reg_trainer import OnehotRegParapredTrainer
 # import seaborn
 
 faulthandler.enable()
-install()
 import numpy as np
 
 

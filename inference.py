@@ -55,9 +55,6 @@ def parse_arguments():
     p.add_argument('--seed_data', type=int, default=123, help='if you want to use a different seed for the datasplit')
     p.add_argument('--loss_func', type=str, default='MSELoss', help='Class name of torch.nn like [MSELoss, L1Loss]')
     p.add_argument('--loss_params', type=dict, default={}, help='parameters with keywords of the chosen loss function')
-    p.add_argument('--critic_loss', type=str, default='MSELoss', help='Class name of torch.nn like [MSELoss, L1Loss]')
-    p.add_argument('--critic_loss_params', type=dict, default={},
-                   help='parameters with keywords of the chosen loss function')
     p.add_argument('--optimizer', type=str, default='Adam', help='Class name of torch.optim like [Adam, SGD, AdamW]')
     p.add_argument('--optimizer_params', type=dict, help='parameters with keywords of the chosen optimizer like lr')
     p.add_argument('--lr_scheduler', type=str,
@@ -93,8 +90,6 @@ def parse_arguments():
     p.add_argument('--num_epochs_local_only', type=int, default=1,
                    help='when training with OptimalTransportTrainer, this specifies for how many epochs only the local predictions will get a loss')
 
-    p.add_argument('--required_data', default=[],
-                   help='what will be included in a batch like [dgl_graph, targets, dgl_graph3d]')
     p.add_argument('--collate_function', default='graph_collate', help='the collate function to use for DataLoader')
     p.add_argument('--collate_params', type=dict, default={},
                    help='parameters with keywords of the chosen collate function')
