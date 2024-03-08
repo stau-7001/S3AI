@@ -49,7 +49,7 @@ def read_csv_to_list(file_path):
     return result
 
 class IC50Dataset(Dataset):
-    def __init__(self, spike_data = '/code/lyt/S3AI/data/output2.csv', ic50_data = '/userhome/lyt/S3AI/data/updated_processed_data.csv',pssm_data = '/code/lyt/S3AI/data/processed_data_cdr.csv'):
+    def __init__(self, spike_data = './data/Ag_sequence.csv', ic50_data = '/userhome/lyt/S3AI/data/updated_processed_data.csv'):
         super().__init__()
         self.ic_50_data = read_csv_to_list(ic50_data)
         self.spike_dict = read_csv_to_dict(spike_data)
