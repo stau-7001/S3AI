@@ -1,0 +1,54 @@
+experiment_name: 'Sarscov2_S3AI_train'
+
+num_epochs: 200
+batch_size: 1
+log_iterations: 64
+patience: 25
+loss_func: Reg_Cls_Loss
+loss_params:
+  gamma: 1
+  beta: 0.8
+num_train: 50000
+trainer: MultitaskIC50Trainer
+metrics:
+  - mae
+  - rmse
+  - spearman
+  - pearsonr
+  - acc
+  - f1
+  - prauc
+  - rocauc
+  - mcc
+main_metric: mae
+
+optimizer: Adam
+optimizer_params:
+  lr: 1.0e-4
+scheduler_step_per_batch: False
+lr_scheduler: WarmUpWrapper
+lr_scheduler_params:
+  warmup_steps: [700]
+  # parameters of scheduler to run after warmup
+  wrapped_scheduler: ReduceLROnPlateau
+  cooldown: 10
+  factor: 0.6
+  patience: 10
+  min_lr: 1.0e-6
+  threshold: 1.0e-4
+  mode: 'min'
+  verbose: True
+eval_on_test: False
+# Model parameters
+model_type: 'MultiTask_S3AI_Chem'
+model_parameters:
+  esm_hidden_dim: 640
+  max_Ag_len: 210
+  max_Ag_len: 250
+  virus_name: 'SARSCOV2'
+
+pretrain_checkpoint_str: './ckps'
+# pretrain_checkpoint_ab: './ckps'
+# pretrain_checkpoint_ag: './ckps'
+# continue training from checkpoint:
+checkpoint: /userhome/lyt/S3AI/runs/MultiTask_S3AI_Chem_IC50_Sarscov2_S3AI_rerun_fix_data_123_28-11_04-24-38/best_checkpoint.pt

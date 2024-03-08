@@ -1,0 +1,54 @@
+experiment_name: 'Sarscov2_ablation_inter_Str'
+
+num_epochs: 1000
+batch_size: 1
+log_iterations: 64
+patience: 25
+loss_func: Reg_Cls_Loss
+loss_params:
+  gamma: 1
+  beta: 0.8
+num_train: 50000
+trainer: MultitaskIC50Trainer
+metrics:
+  - mae
+  - rmse
+  - spearman
+  - pearsonr
+  - acc
+  - f1
+  - prauc
+  - rocauc
+  - mcc
+main_metric: mae
+
+optimizer: Adam
+optimizer_params:
+  lr: 1.0e-4
+scheduler_step_per_batch: False
+lr_scheduler: WarmUpWrapper
+lr_scheduler_params:
+  warmup_steps: [700]
+  # parameters of scheduler to run after warmup
+  wrapped_scheduler: ReduceLROnPlateau
+  cooldown: 10
+  factor: 0.6
+  patience: 10
+  min_lr: 1.0e-6
+  threshold: 1.0e-4
+  mode: 'min'
+  verbose: True
+
+# Model parameters
+model_type: 'MultiTask_S3AI_non_inter'
+model_parameters:
+  esm_hidden_dim: 640
+  max_Ag_len: 210
+  max_Ag_len: 250
+  virus_name: 'SARSCOV2'
+
+# pretrain_checkpoint_str: './ckps'
+pretrain_checkpoint_ab: './ckps'
+pretrain_checkpoint_ag: './ckps'
+checkpoint: runs/MultiTask_S3AI_non_inter_IC50_Sarscov2_ablation_inter_Str_123_28-01_11-39-24/best_checkpoint.pt
+# 修改了识别RBD的小bug（+1->+5）
