@@ -9,8 +9,8 @@ pip install -r requirements.txt
 
 ## Data
 The Sars-cov2 IC50 data is in the `data` folder.
-* `data/` is the paired Ab-Ag data.
-* `data/` is the Ag sequence data.
+* `data/updated_processed_data.csv` is the paired Ab-Ag data.
+* `data/Ag_sequence.csv` is the Ag sequence data.
 
 ## Model inference 
 
