@@ -185,7 +185,7 @@ def get_mask_output(args, model, activation, Ab_seq_H, Ab_seq_L, CDR_H, CDR_L):
 
 def Shapley(args, model, device, Ab_seq_H, Ab_seq_L, Ag_seq, CDR_H, CDR_L):
     with torch.no_grad():
-        reg_pred, cls_pred = model(Ab_seq_H, Ab_seq_L, Ag_seq)  # forward the sequence to the model
+        reg_pred, cls_pred, _ = model(Ab_seq_H, Ab_seq_L, Ag_seq)  # forward the sequence to the model
         activations = model.conv_module.activations
     activation = activations[args.target_layer]
     v_empty, phi, player = get_mask_output(args, model, activation, Ab_seq_H, Ab_seq_L, CDR_H, CDR_L)
