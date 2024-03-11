@@ -117,7 +117,6 @@ def get_mask_output(args, model, activation, Ab_seq_H, Ab_seq_L, CDR_H, CDR_L):
     components_num = len(player)
     baseline = 0
     masks = torch.BoolTensor(generate_all_masks(components_num))
-    print(masks.shape)
     v_S = []
     with torch.no_grad():
         m = masks[0]
@@ -164,13 +163,10 @@ def Shapley(args, model, device, Ab_seq_H, Ab_seq_L, Ag_seq, CDR_H, CDR_L):
     with torch.no_grad():
         reg_pred, cls_pred = model(Ab_seq_H, Ab_seq_L, Ag_seq)  # forward the sequence to the model
         activations = model.conv_module.activations
-    print('Activations:',activations[args.target_layer].shape)
-    print(reg_pred, cls_pred)
     activation = activations[args.target_layer]
     v_empty, phi, player = get_mask_output(args, model, activation, Ab_seq_H, Ab_seq_L, CDR_H, CDR_L)
     with torch.no_grad():
         cls_pred = model.feature2out(Ab_seq_H, Ab_seq_L, activation, args.target_layer, args.output_type)
-    print(cls_pred)
     return v_empty, phi, player, cls_pred
 
 def get_arguments():
