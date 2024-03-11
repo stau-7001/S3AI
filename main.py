@@ -99,7 +99,7 @@ def parse_arguments():
     p.add_argument('--train_sampler', type=str, default=None, help='any of pytorchs samplers or a custom sampler')
 
     p.add_argument('--eval_on_test', type=bool, default=False, help='runs evaluation on test set if true')
-    p.add_argument('--OOD_test', type=bool, default=False, help='runs ODD evaluation on test set if true')
+    p.add_argument('--OOD_test', type=bool, default=True, help='runs ODD evaluation on test set if true')
     return p.parse_args()
 
 
@@ -293,6 +293,14 @@ def train_HIV_cls(args, device, metrics_dict):
     metrics = {metric: metrics_dict[metric] for metric in args.metrics}
 
     trainer = get_trainer(args=args, model=model, data=all_data, device=device, metrics=metrics)
+    if args.eval_on_test:
+        test_metrics = trainer.evaluation(test_loader, data_split='test')
+        if args.OOD_test:
+            unseen_test_loader = DataLoader(Subset(all_data, unseen_test_idx), batch_size=args.batch_size,collate_fn=HIV_Cls_collate)
+            unseen_test_metrics = trainer.evaluation(unseen_test_loader, data_split='unseen_test')
+            return unseen_test_metrics
+    
+    
     val_metrics = trainer.train(train_loader, val_loader)
     test_metrics = trainer.evaluation(test_loader, data_split='test')
     if args.OOD_test:
@@ -344,6 +352,14 @@ def train_HIV_reg(args, device, metrics_dict):
     metrics = {metric: metrics_dict[metric] for metric in args.metrics}
 
     trainer = get_trainer(args=args, model=model, data=all_data, device=device, metrics=metrics)
+    
+    if args.eval_on_test: 
+        test_metrics = trainer.evaluation(test_loader, data_split='test')
+        if args.OOD_test:
+            unseen_test_loader = DataLoader(Subset(all_data, unseen_test_idx), batch_size=args.batch_size,collate_fn=HIV_Reg_collate)
+            unseen_test_metrics = trainer.evaluation(unseen_test_loader, data_split='unseen_test')
+            return unseen_test_metrics
+    
     val_metrics = trainer.train(train_loader, val_loader)
     
     test_metrics = trainer.evaluation(test_loader, data_split='test')

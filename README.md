@@ -1,4 +1,13 @@
 # S3AI
+## Table of Contents
+- [Overview](#overview)
+- [Installation](#installation)
+- [Data](#data)
+- [Model inference](#model-inference)
+- [Model training](#model-training)
+- [License](#license)
+
+## Overview
 ## Installation
 
 We highly recommand that you use Anaconda for Installation
@@ -9,22 +18,36 @@ pip install -r requirements.txt
 ```
 
 ## Data
-The Sars-cov2 IC50 data is in the `data` folder.
+The SARS-CoV-2 IC50 data is in the `data` folder.
 * `data/updated_processed_data.csv` is the paired Ab-Ag data.
 * `data/Ag_sequence.csv` is the Ag sequence data.
 
 ## Model inference 
 ### Download checkpoint
-Download the checkpoint of S3AI from [here](10.6084/m9.figshare.25378708) and modify the paths in the code.
+Download the checkpoint of S3AI and modify the paths in the code.
+| Content  | Link   |
+| ----- | ----- |
+| Checkpoint on SARS-CoV-2 | [link](https://figshare.com/ndownloader/files/44970310) |
+| Checkpoint on HIV cls | [link]() |
+| Checkpoint on HIV reg | [link]() |
 
-To test S3AI on Sars-cov2 IC50 test data, please run
+To test S3AI on SARS-CoV-2 IC50 test data, please run
 ```
 python main.py --config=configs/test_on_sarscov2.yml
 ```
 
-## Model training
+To test S3AI on HIV test data for classification, please run
+```
+python main.py --config=configs/test_on_HIV_cls.yml
+```
 
-To train S3AI, please run
+To test S3AI on HIV test data for regression, please run
+```
+python main.py --config=configs/test_on_HIV_reg.yml
+```
+
+## Model training
+To train S3AI on downstream task from scratch, please run
 ```
 python main.py --config=configs/train.yml
 ```
