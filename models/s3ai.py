@@ -162,13 +162,44 @@ class CNNModule(nn.Module):
         
         # Define ELU activation function with adaptive scaling
         self.elu = nn.ELU(True)
-        
-    def forward(self, x):
-        self.activations = {}
+    
+    def feature2out(self, x, target_layer:str):
+        if target_layer == 'input':
+            x = self.bn0(x)
+            x = self.bn1(self.elu(self.conv1(x)))
+            x = self.bn2(self.elu(self.conv2(x)))
+            x = self.bn3(self.elu(self.conv3(x)))
+        elif target_layer == 'input_bn':
+            x = self.bn1(self.elu(self.conv1(x)))
+            x = self.bn2(self.elu(self.conv2(x)))
+            x = self.bn3(self.elu(self.conv3(x)))
+        elif target_layer == 'conv1':
+            x = self.bn2(self.elu(self.conv2(x)))
+            x = self.bn3(self.elu(self.conv3(x)))
+        elif target_layer == 'conv2':
+            x = self.bn3(self.elu(self.conv3(x)))
+        x = torch.mean(x, dim=[2, 3])
+        return x
 
+
+    def forward(self, x):
+    #     x = x.permute(0, 3, 1, 2)
+        
+    #     # Apply convolutional layers with ELU activation and batch normalization
+    #     x = self.bn0(x)
+    #     x = self.bn1(self.elu(self.conv1(x)))
+    #     x = self.bn2(self.elu(self.conv2(x)))
+    #     x = self.bn3(self.elu(self.conv3(x)))
+        
+    #     # Global average pooling
+    #     x = torch.mean(x, dim=[2, 3])
+        self.activations = {}
+        
         x = x.permute(0, 3, 1, 2)
         self.activations['x'] = x
+        self.activations['input'] = x
         x = self.bn0(x)
+        self.activations['input_bn'] = x
         self.activations['conv1'] = self.bn1(self.elu(self.conv1(x)))
         x = self.activations['conv1']
         self.activations['conv2'] = self.bn2(self.elu(self.conv2(x)))
@@ -440,6 +471,25 @@ class MultiTask_S3AI_Chem(nn.Module):
             nn.Linear(self.cls_dim // 64, 1)).to(device)
         self.alpha = alpha
 
+    def feature2out(self, Abseq_H, Abseq_L, activation, target_layer, output_type):
+        Zab, Ab_batch_lens = self.Ab_encoder(Abseq_H, Abseq_L)  # shape: (batch_size, Abseq_len, esm_hidden_dim=640), (batch_size,)
+        Str_Zab = self.MLP(Zab)  # shape: (batch_size, seq_len, str_hidden_dim)
+
+        x_inter = self.conv_module.feature2out(activation, target_layer)
+        sequence_representations_str = []
+        for i, tokens_len in enumerate(Ab_batch_lens):
+            sequence_representations_str.append(Str_Zab[i, 1:tokens_len - 1].mean(0))  # [str_hidden_dim]
+
+        x_str = torch.stack(sequence_representations_str, dim=0)  # shape: (batch_size, str_hidden_dim)
+
+        x = torch.cat((x_str, x_inter), dim=1)
+        if output_type == 'classification':
+            x_cls_final = self.classification_head(x)  # shape: (batch_size, 1)
+            re = x_cls_final[0,0]
+        elif output_type == 'regression':
+            x_reg_final = self.regression_head(x)
+            re = x_reg_final
+        return re
 
     def forward(self, Abseq_H, Abseq_L, Agseq):
         Zab, Ab_batch_lens = self.Ab_encoder(Abseq_H, Abseq_L)  # shape: (batch_size, Abseq_len, esm_hidden_dim=640), (batch_size,)
