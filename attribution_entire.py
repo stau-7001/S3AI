@@ -129,7 +129,6 @@ def get_mask_output(args, model, activation, Ab_seq_H, Ab_seq_L, CDR_H, CDR_L):
                     for cdr in combine_CDR:
                         x_act[:,:,:,cdr[0]:cdr[1]+1] = 0
         v_empty = model.feature2out(Ab_seq_H, Ab_seq_L, x_act, args.target_layer, args.output_type)
-        print(v_empty)
         for m in tqdm(masks):
             x_act = activation.clone().to(device)
             for i in range(components_num):
@@ -253,7 +252,6 @@ if __name__ == '__main__':
         cls_label_list.append(cls_label)
         Ab_seq_H_list.append(Ab_seq_H)
         Ab_seq_L_list.append(Ab_seq_L)
-
         if batch_idx%500 == 0:
             np.savez(f'/userhome/lyt/S3AI/zxh_full/shapley_phi_st{args.sample_st}_ed{args.sample_st+batch_idx}.npz',v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list,CDR_L=CDR_L_list, ic50=ic50_list, cls_label=cls_label_list, Ab_seq_H=Ab_seq_H_list, Ab_seq_L=Ab_seq_L_list)
     np.savez(f'/userhome/lyt/S3AI/zxh_full/shapley_phi_st{args.sample_st}_samplenum{args.sample_num}_.npz',v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list, CDR_L=CDR_L_list, ic50=ic50_list, cls_label=cls_label_list, Ab_seq_H=Ab_seq_H_list, Ab_seq_L=Ab_seq_L_list)
