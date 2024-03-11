@@ -85,7 +85,7 @@ def parse_arguments():
     p.add_argument('--num_epochs_local_only', type=int, default=1,
                    help='when training with OptimalTransportTrainer, this specifies for how many epochs only the local predictions will get a loss')
 
-    p.add_argument('--collate_function', default='graph_collate', help='the collate function to use for DataLoader')
+    p.add_argument('--collate_function', default='None', help='the collate function to use for DataLoader')
     p.add_argument('--collate_params', type=dict, default={},
                    help='parameters with keywords of the chosen collate function')
     p.add_argument('--device', type=str, default='cuda', help='What device to train on: cuda or cpu')

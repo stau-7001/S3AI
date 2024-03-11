@@ -14,6 +14,8 @@ The Sars-cov2 IC50 data is in the `data` folder.
 * `data/Ag_sequence.csv` is the Ag sequence data.
 
 ## Model inference 
+### Download checkpoint
+Download the checkpoint of S3AI from [here](10.6084/m9.figshare.25378708) and modify the paths in the code.
 
 To test S3AI on Sars-cov2 IC50 test data, please run
 ```
