@@ -11,6 +11,16 @@ import math
 import torch
 from scipy.stats import norm
 from torch.utils.tensorboard import SummaryWriter
+aa_chars = np.array(list('AVLIPSTMEQHKRFYWDNCG'))
+def seq_to_indices(seq, aa_chars='AVLIPSTMEQHKRFYWDNCG'):
+    """    
+    :param seq: str, 
+    :param aa_chars: np.array, 
+    :return: np.array
+    """
+    seq_array = np.array(list(seq))
+    indices = np.argmax(aa_chars[:, None] == seq_array, axis=0)
+    return indices
 
 HydrogenBondAcceptor_Donor = {
     'A':[5.0,3.0],
@@ -104,13 +114,44 @@ Volume = {
     'G':[60.1],
 }
 # Zamyatnin, A.A., Protein volume in solution, Prog. Biophys. Mol. Biol., 24:107-123 (1972), PMID: 4566650.
+
+hydrogen_bond_acceptor_donor_values = np.array(list(HydrogenBondAcceptor_Donor.values()))
+charged_side_chains_values = np.array([Charged_Side_Chains[aa][0] for aa in aa_chars])
+hydropathy_index_values = np.array([Hydropathy_Index[aa][0] for aa in aa_chars])
+volume_values = np.array([Volume[aa][0] for aa in aa_chars])
+
 def update_matrix(value):
     if isinstance(value, torch.Tensor):
         return value.item()  
     else:
         return value  
+    
+def generate_Chem_tensor(Abseq, Agseq, aa_chars=aa_chars, hydrogen_bond_acceptor_donor_values=hydrogen_bond_acceptor_donor_values, charged_side_chains_values=charged_side_chains_values, hydropathy_index_values=hydropathy_index_values, volume_values=volume_values):
+    """
+    """
+    Abseq_indices = seq_to_indices(Abseq, aa_chars)
+    Agseq_indices = seq_to_indices(Agseq, aa_chars)
+    
+    tensor = np.zeros((len(Agseq), len(Abseq), 5))
+    
+    Ab_hydrogen_bond = hydrogen_bond_acceptor_donor_values[Abseq_indices]
+    Ag_hydrogen_bond = hydrogen_bond_acceptor_donor_values[Agseq_indices]
+    Ab_charged = charged_side_chains_values[Abseq_indices]
+    Ag_charged = charged_side_chains_values[Agseq_indices]
+    Ab_hydropathy = hydropathy_index_values[Abseq_indices]
+    Ag_hydropathy = hydropathy_index_values[Agseq_indices]
+    Ab_volume = volume_values[Abseq_indices]
+    Ag_volume = volume_values[Agseq_indices]
+    
+    tensor[:, :, 0] = np.minimum(Ab_hydrogen_bond[:, 0][None, :], Ag_hydrogen_bond[:, 1][:, None])
+    tensor[:, :, 1] = np.minimum(Ab_hydrogen_bond[:, 1][None, :], Ag_hydrogen_bond[:, 0][:, None])
+    tensor[:, :, 2] = 0.5 * np.abs(Ab_charged[None, :] - Ag_charged[:, None])
+    tensor[:, :, 3] = 1 - 0.25 * np.abs(Ab_hydropathy[None, :] - Ag_hydropathy[:, None])
+    tensor[:, :, 4] = np.exp(-((Ab_volume[None, :] + Ag_volume[:, None]) - 282.52)**2 / (2 * (55.54**2)))
+    
+    return torch.tensor(tensor, dtype=torch.float)
 
-def generate_Chem_tensor(Abseq, Agseq):
+def generate_Chem_tensor_old(Abseq, Agseq):
     Abseq_len = len(Abseq)
     Agseq_len = len(Agseq)
     # print(Abseq,Agseq)
@@ -302,4 +343,3 @@ def move_to_device(element, device):
         return [move_to_device(x, device) for x in element]
     else:
         return element.to(device) if isinstance(element, torch.Tensor) else element
-
