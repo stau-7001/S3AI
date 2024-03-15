@@ -273,7 +273,6 @@ if __name__ == '__main__':
         if batch_idx%1 == 0:
             shapley_save_file = os.path.join(args.shapleydir,f'inner_phi_{batch_idx}.npz')
             np.savez(shapley_save_file,v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list, CDR_L=CDR_L_list)
-        break
     total_save_file = os.path.join(args.shapleydir,f'inner_phi.npz')
     np.savez(total_save_file,v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list, CDR_L=CDR_L_list)
     
