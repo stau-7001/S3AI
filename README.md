@@ -75,9 +75,9 @@ This file stores the following elements:
 
 - **v_N:** Predicted output of the network on each sample
 - **phi:** Attribution value of each FR (Framework Region) and the entire CDRs (Complementarity-determining regions)
-- **player:** Partition of the variables. For each variable, it saves a tuple (l, r), where the tuple represents the position of the corresponding FR on the antibody sequence. Specifically, (-1, -1) indicates the entire CDRs.
-- **CDR_H:** Saves three tuples (l, r) representing the positions of CDR-H1, CDR-H2, and CDR-H3 on the antibody sequence.
-- **CDR_L:** Saves three tuples (l, r) representing the positions of CDR-L1, CDR-L2, and CDR-L3 on the antibody sequence.
+- **player:** Partition of the variables. For each variable, it saves a tuple $(l, r)$, where the tuple represents the position of the corresponding FR on the antibody sequence. Specifically, $(-1, -1)$ indicates the entire CDRs.
+- **CDR_H:** Saves three tuples $(l, r)$ representing the positions of CDR-H1, CDR-H2, and CDR-H3 on the antibody sequence.
+- **CDR_L:** Saves three tuples $(l, r)$ representing the positions of CDR-L1, CDR-L2, and CDR-L3 on the antibody sequence.
 - **ic50:** True IC50 values of each sample.
 - **cls_label:** True classification results of each sample.
 
@@ -94,10 +94,10 @@ python attribution_entire.py --config=configs/test_attribution.yml
 You will save a file in the format `inner_phi.npz`. This file stores the following elements:
 
 - **v_N:** attribution value of the entire CDRs under different masks
-- **phi:** Attribution value of each FR (Framework Region) and the entire CDRs (Complementarity-determining regions)
-- **player:** Partition of the variables. For each variable, it saves a tuple (l, r), where the tuple represents the position of the corresponding FR on the antibody sequence. Specifically, (-1, -1) indicates the entire CDRs.
-- **CDR_H:** Saves three tuples (l, r) representing the positions of CDR-H1, CDR-H2, and CDR-H3 on the antibody sequence.
-- **CDR_L:** Saves three tuples (l, r) representing the positions of CDR-L1, CDR-L2, and CDR-L3 on the antibody sequence.
+- **phi:** Attribution value of each CDR (Complementarity-determining region)
+- **player:** Partition of the variables. For each variable, it saves a tuple $(l, r)$, where the tuple represents the position of the corresponding CDR on the antibody sequence. 
+- **CDR_H:** Saves three tuples $(l, r)$ representing the positions of CDR-H1, CDR-H2, and CDR-H3 on the antibody sequence.
+- **CDR_L:** Saves three tuples $(l, r)$ representing the positions of CDR-L1, CDR-L2, and CDR-L3 on the antibody sequence.
 
 ## License
 
