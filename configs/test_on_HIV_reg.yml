@@ -11,8 +11,8 @@ metrics:
   - rmse
   - spearman
   - pearsonr
-main_metric: pearsonr
-main_metric_goal: max
+main_metric: mae
+main_metric_goal: min
 dataset: HIVreg
 optimizer: Adam
 optimizer_params:
@@ -38,7 +38,5 @@ model_parameters:
   esm_hidden_dim: 640
   virus_name: 'HIV'
 pretrain_checkpoint_str: './ckps'
-pretrain_checkpoint_ab: './ckps'
-pretrain_checkpoint_ag: './ckps'
 # continue training from checkpoint:
 checkpoint: /userhome/lyt/S3AI/runs/Reg_S3AI_Chem_HIVreg_HIV_reg_only_123_23-11_18-00-37/best_checkpoint.pt

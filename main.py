@@ -259,8 +259,8 @@ def train_HIV_cls(args, device, metrics_dict):
     if  args.OOD_test:
         all_idx = get_random_indices(np.load('./data/hiv_idx/cls/train_index.npy'))
         train_idx = all_idx[:int(0.8 * len(all_idx))]
-        test_idx = all_idx[int(0.8 * len(all_idx)):int(0.9 * len(all_idx))]
-        val_idx = all_idx[int(0.9 * len(all_idx)):]
+        val_idx = all_idx[int(0.8 * len(all_idx)):int(0.9 * len(all_idx))]
+        test_idx = all_idx[int(0.9 * len(all_idx)):]
         np.save('./data/hiv_idx/cls/train_index_shuffled.npy', all_idx)
         unseen_test_idx = np.load('./data/hiv_idx/cls/test_unseen_index.npy')
     else:
@@ -318,8 +318,8 @@ def train_HIV_reg(args, device, metrics_dict):
     if  args.OOD_test:
         all_idx = get_random_indices(np.load('./data/hiv_idx/reg/train_index.npy'))
         train_idx = all_idx[:int(0.8 * len(all_idx))]
-        test_idx = all_idx[int(0.8 * len(all_idx)):int(0.9 * len(all_idx))]
-        val_idx = all_idx[int(0.9 * len(all_idx)):]
+        val_idx = all_idx[int(0.8 * len(all_idx)):int(0.9 * len(all_idx))]
+        test_idx = all_idx[int(0.9 * len(all_idx)):]
         np.save('./data/hiv_idx/cls/train_index_shuffled.npy', all_idx)
         unseen_test_idx = np.load('./data/hiv_idx/reg/test_unseen_index.npy')
     else:

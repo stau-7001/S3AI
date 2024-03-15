@@ -1,20 +1,19 @@
-experiment_name: 'HIV_cls_only_test'
-
+experiment_name: 'HIV_reg_only_test'
 num_epochs: 200
 batch_size: 1
 log_iterations: 64
 patience: 25
-loss_func: ClsFocalLoss
+loss_func: RegFocalLoss
 num_train: 50000
-trainer: ClsTrainer
+trainer: RegTrainer
 metrics:
-  - acc
-  - f1
-  - prauc
-  - rocauc
-  - mcc
-main_metric: acc
-dataset: HIVcls
+  - mae
+  - rmse
+  - spearman
+  - pearsonr
+main_metric: mae
+main_metric_goal: min
+dataset: HIVreg
 optimizer: Adam
 optimizer_params:
   lr: 1.0e-4
@@ -32,13 +31,14 @@ lr_scheduler_params:
   mode: 'min'
   verbose: True
 OOD_test: True
-eval_on_test: True
+eval_on_test: False
 # Model parameters
-model_type: 'Cls_S3AI_Chem'
+model_type: 'Reg_S3AI_Chem'
 model_parameters:
+  max_Ag_len: 700
+  max_Ag_len: 230
   esm_hidden_dim: 640
   virus_name: 'HIV'
-
 pretrain_checkpoint_str: './ckps'
 # continue training from checkpoint:
-checkpoint: /userhome/lyt/S3AI/runs/Cls_S3AI_Chem_HIV_HIV_cls_123_26-10_13-41-37/best_checkpoint.pt
+checkpoint: /userhome/lyt/S3AI/runs/Reg_S3AI_Chem_HIVreg_HIV_reg_only_123_23-11_18-00-37/best_checkpoint.pt

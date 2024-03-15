@@ -628,7 +628,7 @@ class MultiTask_S3AI_Chem_HIV(nn.Module):
 
 
 class Cls_S3AI_Chem(nn.Module):
-    def __init__(self, device, esm_hidden_dim=640, str_hidden_dim = 64, alpha = 0.8, max_Ab_len = 230, max_Ag_len = 700, virus_name = 'HIV',**kwargs):
+    def __init__(self, device, esm_hidden_dim=640, str_hidden_dim = 64, alpha = 0.8, max_Ab_len = 230, max_Ag_len = 204, virus_name = 'HIV',**kwargs):
         super(Cls_S3AI_Chem, self).__init__()
         self.device = device
         self.max_Ab_len = max_Ab_len
