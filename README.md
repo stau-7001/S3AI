@@ -30,8 +30,8 @@ Download the checkpoint of S3AI and modify the paths in the code.
 | Content  | Link   |
 | ----- | ----- |
 | Checkpoint on SARS-CoV-2 | [link](https://figshare.com/ndownloader/files/44970310) |
-| Checkpoint on HIV cls | [link]() |
-| Checkpoint on HIV reg | [link]() |
+| Checkpoint on HIV cls | [link](https://figshare.com/ndownloader/files/45053224) |
+| Checkpoint on HIV reg | [link](https://figshare.com/ndownloader/files/45053392) |
 
 To test S3AI on SARS-CoV-2 IC50 test data, please run
 ```
