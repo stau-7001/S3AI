@@ -86,7 +86,7 @@ This file stores the following elements:
 To evaluate the attribution of each CDR  on test data, please run:
 
 ```python
-python attribution_entire.py --config=configs/test_attribution.yml
+python attribution_enchCDR.py --config=configs/test_attribution.yml
 ```
 
 #### File Description
