@@ -49,9 +49,11 @@ python main.py --config=configs/test_on_HIV_reg.yml
 ```
 
 ## Model training
-To train S3AI on downstream task from scratch, please run
+To train S3AI on downstream tasks from scratch, please run
 ```
-python main.py --config=configs/train.yml
+python main.py --config=configs/train_on_sarscov2.yml
+python main.py --config=configs/train_on_HIV_cls.yml
+python main.py --config=configs/train_on_HIV_reg.yml
 ```
 
 ## License
