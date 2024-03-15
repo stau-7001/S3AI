@@ -57,6 +57,48 @@ python main.py --config=configs/train_on_HIV_cls.yml
 python main.py --config=configs/train_on_HIV_reg.yml
 ```
 
+## Attribution evaluation
+
+### Attribution of entire CDRs and FRs
+
+To evaluate the attribution of the entire CDRs and FRs to the prediction output on test data, please run:
+
+```python
+python attribution_entire.py --config=configs/test_attribution.yml
+```
+
+#### File Description
+
+You will save a file in the format `shapley_phi_st{args.sample_st}_samplenum{args.sample_num}.npz`, where **sample_st** indicates the starting index of the stored samples in the training set, and **sample_num** indicates the number of samples for which attributions are computed. 
+
+This file stores the following elements:
+
+- **v_N:** Predicted output of the network on each sample
+- **phi:** Attribution value of each FR (Framework Region) and the entire CDRs (Complementarity-determining regions)
+- **player:** Partition of the variables. For each variable, it saves a tuple (l, r), where the tuple represents the position of the corresponding FR on the antibody sequence. Specifically, (-1, -1) indicates the entire CDRs.
+- **CDR_H:** Saves three tuples (l, r) representing the positions of CDR-H1, CDR-H2, and CDR-H3 on the antibody sequence.
+- **CDR_L:** Saves three tuples (l, r) representing the positions of CDR-L1, CDR-L2, and CDR-L3 on the antibody sequence.
+- **ic50:** True IC50 values of each sample.
+- **cls_label:** True classification results of each sample.
+
+### Attribution of each CDR
+
+To evaluate the attribution of each CDR  on test data, please run:
+
+```python
+python attribution_entire.py --config=configs/test_attribution.yml
+```
+
+#### File Description
+
+You will save a file in the format `inner_phi.npz`. This file stores the following elements:
+
+- **v_N:** attribution value of the entire CDRs under different masks
+- **phi:** Attribution value of each FR (Framework Region) and the entire CDRs (Complementarity-determining regions)
+- **player:** Partition of the variables. For each variable, it saves a tuple (l, r), where the tuple represents the position of the corresponding FR on the antibody sequence. Specifically, (-1, -1) indicates the entire CDRs.
+- **CDR_H:** Saves three tuples (l, r) representing the positions of CDR-H1, CDR-H2, and CDR-H3 on the antibody sequence.
+- **CDR_L:** Saves three tuples (l, r) representing the positions of CDR-L1, CDR-L2, and CDR-L3 on the antibody sequence.
+
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
