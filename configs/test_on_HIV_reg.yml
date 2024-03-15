@@ -1,0 +1,44 @@
+experiment_name: 'HIV_reg_only_test'
+num_epochs: 200
+batch_size: 1
+log_iterations: 64
+patience: 25
+loss_func: RegFocalLoss
+num_train: 50000
+trainer: RegTrainer
+metrics:
+  - mae
+  - rmse
+  - spearman
+  - pearsonr
+main_metric: pearsonr
+main_metric_goal: max
+dataset: HIVreg
+optimizer: Adam
+optimizer_params:
+  lr: 1.0e-4
+scheduler_step_per_batch: False
+lr_scheduler: WarmUpWrapper
+lr_scheduler_params:
+  warmup_steps: [700]
+  # parameters of scheduler to run after warmup
+  wrapped_scheduler: ReduceLROnPlateau
+  cooldown: 10
+  factor: 0.6
+  patience: 10
+  min_lr: 1.0e-5
+  threshold: 1.0e-4
+  mode: 'min'
+  verbose: True
+OOD_test: True
+eval_on_test: True
+# Model parameters
+model_type: 'Reg_S3AI_Chem'
+model_parameters:
+  esm_hidden_dim: 640
+  virus_name: 'HIV'
+pretrain_checkpoint_str: './ckps'
+pretrain_checkpoint_ab: './ckps'
+pretrain_checkpoint_ag: './ckps'
+# continue training from checkpoint:
+checkpoint: /userhome/lyt/S3AI/runs/Reg_S3AI_Chem_HIVreg_HIV_reg_only_123_23-11_18-00-37/best_checkpoint.pt

@@ -143,7 +143,7 @@ class OnehotRegTrainer(Trainer):
 
 
     def initialize_optimizer(self, optim):
-        print(self.model.named_parameters())
+        # print(self.model.named_parameters())
         normal_params = [v for k, v in chain(self.model.named_parameters())]
 #         batch_norm_params = [v for k, v in chain(self.model.named_parameters()) if
 #                              'batch_norm' in k]

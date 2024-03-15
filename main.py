@@ -202,7 +202,7 @@ def train(args):
                     'mcc': MCC()
                     }
     print('using device: ', device)
-    print(args.dataset)
+    # print(args.dataset)
     if args.dataset == 'IC50':
         return train_ic50(args, device, metrics_dict)
     elif args.dataset == 'HIVcls':
@@ -246,6 +246,7 @@ def train_ic50(args, device, metrics_dict):
     trainer = get_trainer(args=args, model=model, data=all_data, device=device, metrics=metrics)
     
     if args.eval_on_test:
+        print('running evaluation on test set, this might take a while...')
         test_metrics = trainer.evaluation(test_loader, data_split='test')
         return test_metrics, trainer.writer.log_dir
     val_metrics = trainer.train(train_loader, val_loader)
@@ -294,7 +295,8 @@ def train_HIV_cls(args, device, metrics_dict):
 
     trainer = get_trainer(args=args, model=model, data=all_data, device=device, metrics=metrics)
     if args.eval_on_test:
-        test_metrics = trainer.evaluation(test_loader, data_split='test')
+        print('running evaluation on test set, this might take a while...')
+        # test_metrics = trainer.evaluation(test_loader, data_split='test')
         if args.OOD_test:
             unseen_test_loader = DataLoader(Subset(all_data, unseen_test_idx), batch_size=args.batch_size,collate_fn=HIV_Cls_collate)
             unseen_test_metrics = trainer.evaluation(unseen_test_loader, data_split='unseen_test')
@@ -354,7 +356,8 @@ def train_HIV_reg(args, device, metrics_dict):
     trainer = get_trainer(args=args, model=model, data=all_data, device=device, metrics=metrics)
     
     if args.eval_on_test: 
-        test_metrics = trainer.evaluation(test_loader, data_split='test')
+        print('running evaluation on test set, this might take a while...')
+        # test_metrics = trainer.evaluation(test_loader, data_split='test')
         if args.OOD_test:
             unseen_test_loader = DataLoader(Subset(all_data, unseen_test_idx), batch_size=args.batch_size,collate_fn=HIV_Reg_collate)
             unseen_test_metrics = trainer.evaluation(unseen_test_loader, data_split='unseen_test')
