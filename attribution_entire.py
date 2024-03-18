@@ -184,7 +184,7 @@ if __name__ == '__main__':
         os.makedirs(args.indexdir)
     if not os.path.exists(args.shapleydir):
         os.makedirs(args.shapleydir)
-    index_path = os.path.join(args.indexdir,'train_index_shuffled_full.npy')
+    index_path = os.path.join(args.indexdir,'train_index_shuffled_full_entire.npy')
     np.save(index_path, all_idx)
     
     train_loader = DataLoader(Subset(all_data, train_idx), batch_size=1, shuffle=False,collate_fn=pad_collate)
