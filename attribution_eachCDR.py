@@ -2,11 +2,7 @@ import argparse
 import os
 import re
 
-from icecream import install
-
 from commons.utils import seed_all, get_random_indices, TENSORBOARD_FUNCTIONS, z_score_normalization, pad_collate
-
-import seaborn
 
 from trainers.IC50_trainer import IC50Trainer
 from trainers.onehot_IC50_trainer import onehotIC50Trainer
@@ -16,7 +12,7 @@ from datasets.ic50_dataset import IC50Dataset
 from commons.utils import flatten_dict, tensorboard_gradient_magnitude, move_to_device
 import yaml
 from tqdm import tqdm
-from datasets.custom_collate import *  # do not remove
+
 from models import *  # do not remove
 from torch.nn import *  # do not remove
 from torch.optim import *  # do not remove
@@ -30,30 +26,18 @@ from torch.utils.data import DataLoader, Subset
 from trainers.metrics import  PearsonR,RMSE,SpearmanR,MAE,ClassificationAccuracy
 from trainers.trainer import Trainer
 
-# turn on for debugging C code like Segmentation Faults
-import faulthandler
-faulthandler.enable()
-install()
-seaborn.set_theme()
 from datasets.HIV_dataset import HIVClsDataset, HIVRegDataset
 from main import get_trainer
+
 def parse_arguments():
     p = argparse.ArgumentParser()
     p.add_argument('--config', type=argparse.FileType(mode='r'), default='configs_clean/fingerprint_inference.yml')
     p.add_argument('--experiment_name', type=str, help='name that will be added to the runs folder output')
     p.add_argument('--logdir', type=str, default='runs', help='tensorboard logdirectory')
+    p.add_argument('--indexdir', type=str, default='./shapley_data', help='Save directory for train index')
     p.add_argument('--seed', type=int, default=123, help='seed for reproducibility')
     p.add_argument('--seed_data', type=int, default=123, help='if you want to use a different seed for the datasplit')
-    p.add_argument('--loss_func', type=str, default='MSELoss', help='Class name of torch.nn like [MSELoss, L1Loss]')
-    p.add_argument('--loss_params', type=dict, default={}, help='parameters with keywords of the chosen loss function')
-    p.add_argument('--critic_loss', type=str, default='MSELoss', help='Class name of torch.nn like [MSELoss, L1Loss]')
-    p.add_argument('--critic_loss_params', type=dict, default={},
-                   help='parameters with keywords of the chosen loss function')
-    p.add_argument('--expensive_log_iterations', type=int, default=100,
-                   help='frequency with which to do expensive logging operations')
-    p.add_argument('--eval_per_epochs', type=int, default=0,
-                   help='frequency with which to do run the function run_eval_per_epoch that can do some expensive calculations on the val set or sth like that. If this is zero, then the function will never be called')
-    p.add_argument('--pretrain_checkpoint', type=str, help='Specify path to finetune from a pretrained checkpoint')
+    p.add_argument('--checkpoint', type=str, help='Specify path to finetune from a pretrained checkpoint')
     p.add_argument('--device', type=str, default='cuda', help='What device to train on: cuda or cpu')
 
     p.add_argument('--model_type', type=str, default='MPNN', help='Classname of one of the models in the models dir')
@@ -63,6 +47,7 @@ def parse_arguments():
     p.add_argument('--output_type', type=str, default='classification', help='The output type of model to calculate Shapley value')
     p.add_argument('--sample_num', type=int, default=100, help='The num of samples to calculate Shapley value')
     p.add_argument('--sample_st', type=int, default=100, help='The start point of samples to calculate Shapley value')
+    p.add_argument('--shapleydir', type=str, default='./shapley_saved', help='Save directory for Shapley value')
     return p.parse_args()
 
 def load_infer_model(args, device):
@@ -73,7 +58,7 @@ def load_infer_model(args, device):
             device=device,
             **args.model_parameters
         )
-    pretrained_path = args.pretrain_checkpoint
+    pretrained_path = args.checkpoint
     print('load checkpoint from '+ pretrained_path)
      # Load pre-trained parameters
     pretrained_params = torch.load(pretrained_path, map_location=device)
@@ -220,7 +205,14 @@ if __name__ == '__main__':
     all_idx = get_random_indices(len(all_data), args.seed_data)
     model_idx = all_idx[args.sample_st:args.sample_st+args.sample_num]
     train_idx = model_idx
-    np.save('./shapley_data/train_index_shuffled.npy', all_idx)
+    
+    if not os.path.exists(args.indexdir):
+        os.makedirs(args.indexdir)
+    if not os.path.exists(args.shapleydir):
+        os.makedirs(args.shapleydir)
+    index_path = os.path.join(args.indexdir,'train_inner_index_shuffled.npy')
+    np.save(index_path, all_idx)
+
     train_loader = DataLoader(Subset(all_data, train_idx), batch_size=1, shuffle=False,collate_fn=pad_collate)
     
     device = torch.device("cuda:0" if torch.cuda.is_available() and args.device == 'cuda' else "cpu")
@@ -278,7 +270,11 @@ if __name__ == '__main__':
         CDR_H_list.append(CDR_H)
         CDR_L_list.append(CDR_L)
 
-        if batch_idx%10 == 0:
-            np.savez(f'/userhome/lyt/S3AI/zxh/inner_phi_{batch_idx}.npz',v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list, CDR_L=CDR_L_list)
-    np.savez('/userhome/lyt/S3AI/zxh/inner_phi.npz',v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list, CDR_L=CDR_L_list)
-    np.savez('/userhome/lyt/S3AI/zxh_full/inner_phi_IC50_HL.npz',H=H_list, L=L_list,ic50=IC50_list,cls_label=cls_label_list)
+        if batch_idx%1 == 0:
+            shapley_save_file = os.path.join(args.shapleydir,f'inner_phi_{batch_idx}.npz')
+            np.savez(shapley_save_file,v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list, CDR_L=CDR_L_list)
+    total_save_file = os.path.join(args.shapleydir,f'inner_phi.npz')
+    np.savez(total_save_file,v_empty=v_empty_list, v_N=v_N_list, phi=phi_list, player=player_list, CDR_H=CDR_H_list, CDR_L=CDR_L_list)
+    
+    inner_file = os.path.join(args.indexdir,'inner_phi_IC50_HL.npz')
+    np.savez(inner_file, H=H_list, L=L_list,ic50=IC50_list,cls_label=cls_label_list)
