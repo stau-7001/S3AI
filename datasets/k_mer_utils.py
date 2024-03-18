@@ -17,40 +17,6 @@ except ImportError:
 import os.path as osp
 
 
-# def k_mer_ft_generate(raw_protein_list, trans_type='prob', min_df=1):
-#     trans_protein_list = split_protein_str(raw_protein_list)
-#     vectorizer = CountVectorizer(ngram_range=(1, 3), token_pattern=r'\b\w+\b', min_df=min_df)
-#     count_mat = vectorizer.fit_transform(trans_protein_list)
-#     count_mat = count_mat.toarray()
-#
-#     # print(np.sum(count_mat, axis=0).shape)
-#
-#     if trans_type == 'std':
-#     # 按列归一化
-#         stand_scaler = StandardScaler()
-#         stand_scaler.fit(count_mat)
-#         count_mat = stand_scaler.transform(count_mat)
-#
-#     elif trans_type == 'prob':
-#     # 直接转成概率
-#         count_mat = count_mat / np.sum(count_mat, axis=0)
-#
-#     # print(count_mat.shape)
-#     return count_mat
-#
-# # EVQLVESGGGVVQPGR ->  1 2 1 4 5 1 20
-# def split_protein_str(raw_protein_list):
-#     trans_protein_list = []
-#     for raw_str in raw_protein_list:
-#         trans_str = ''
-#         for char in raw_str:
-#             amino_idx = amino_map_idx[char]
-#             trans_str = trans_str + ' ' + str(amino_idx)
-#         trans_protein_list.append(trans_str)
-#         # print(trans_str)
-#     # print(len(trans_protein_list))
-#     return trans_protein_list
-
 
 class KmerTranslator(object):
     def __init__(self, trans_type='std', min_df=1, name=''):

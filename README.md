@@ -18,6 +18,7 @@ We highly recommand that you use Anaconda for Installation
 conda create -n S3AI
 conda activate S3AI
 pip install -r requirements.txt
+pip install fair-esm pyaml==21.10.1
 ```
 
 ## Data
@@ -26,7 +27,6 @@ The SARS-CoV-2 IC50 data is in the `data` folder.
 * `data/Ag_sequence.csv` is the Ag sequence data.
 
 ## Model inference 
-### Download checkpoint
 Download the checkpoint of S3AI and modify the paths in the code.
 | Content  | Link   |
 | ----- | ----- |
@@ -86,7 +86,7 @@ This file stores the following elements:
 To evaluate the attribution of each CDR  on test data, please run:
 
 ```python
-python attribution_enchCDR.py --config=configs/test_attribution.yml
+python attribution_eachCDR.py --config=configs/test_attribution.yml
 ```
 
 #### File Description

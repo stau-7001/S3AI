@@ -1,0 +1,12 @@
+experiment_name: 'Sarscov2_S3AI_attribution_entire'
+
+# Model parameters
+model_type: 'MultiTask_S3AI_Chem'
+model_parameters:
+  esm_hidden_dim: 640
+  max_Ab_len: 250
+  max_Ag_len: 250
+  virus_name: 'SARSCOV2'
+
+pretrain_checkpoint_str: './ckps'
+checkpoint: /userhome/lyt/S3AI/runs/MultiTask_S3AI_Chem_IC50_Sarscov2_S3AI_rerun_fix_data_123_28-11_04-24-38/best_checkpoint.pt
