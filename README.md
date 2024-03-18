@@ -103,6 +103,7 @@ You will save a file in the format `inner_phi.npz`. This file stores the followi
 ## Citation
 
 If you find this code or the models useful in your research, please cite:
+```
 @article{liu2024interpretable,
   title={Interpretable antibody-antigen interaction prediction by bridging structure to sequence},
   author={Liu, Yutian and Nie, Zhiwei and Chen, Jie and Zheng, Xinhao and Fu, Jie and Liu, Zhihong and Liu, Xudong and Xu, Fan and Huang, Xiansong and Zhang, Wen-Bin and others},
@@ -111,6 +112,7 @@ If you find this code or the models useful in your research, please cite:
   year={2024},
   publisher={Cold Spring Harbor Laboratory}
 }
+```
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
