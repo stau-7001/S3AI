@@ -386,17 +386,17 @@ def get_arguments():
     else:
         config_dict = {}
 
-    if args.checkpoint:  # overwrite args with args from checkpoint except for the args that were contained in the config file
-        arg_dict = args.__dict__
-        with open(os.path.join(os.path.dirname(args.checkpoint), 'train_arguments.yaml'), 'r') as arg_file:
-            checkpoint_dict = yaml.load(arg_file, Loader=yaml.FullLoader)
-        for key, value in checkpoint_dict.items():
-            if key not in config_dict.keys():
-                if isinstance(value, list):
-                    for v in value:
-                        arg_dict[key].append(v)
-                else:
-                    arg_dict[key] = value
+    # if args.checkpoint:  # overwrite args with args from checkpoint except for the args that were contained in the config file
+    #     arg_dict = args.__dict__
+    #     with open(os.path.join(os.path.dirname(args.checkpoint), 'train_arguments.yaml'), 'r') as arg_file:
+    #         checkpoint_dict = yaml.load(arg_file, Loader=yaml.FullLoader)
+    #     for key, value in checkpoint_dict.items():
+    #         if key not in config_dict.keys():
+    #             if isinstance(value, list):
+    #                 for v in value:
+    #                     arg_dict[key].append(v)
+    #             else:
+    #                 arg_dict[key] = value
 
     return args
 

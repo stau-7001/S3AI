@@ -40,7 +40,7 @@ def read_csv_to_list(file_path):
 
 
 class HIVRegDataset(Dataset):
-    def __init__(self, ic50_data = '/userhome/lyt/S3AI/data/dataset_hiv_reg.csv'):
+    def __init__(self, ic50_data = './data/dataset_hiv_reg.csv'):
         super().__init__()
         self.ic_50_data = read_csv_to_list(ic50_data)
 
@@ -52,7 +52,7 @@ class HIVRegDataset(Dataset):
         return res
 
 class HIVClsDataset(Dataset):
-    def __init__(self, n01_data = '/userhome/lyt/S3AI/data/dataset_hiv_cls.csv'):
+    def __init__(self, n01_data = './data/dataset_hiv_cls.csv'):
         super().__init__()
         self.ic_50_data = read_csv_to_list(n01_data)
 

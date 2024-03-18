@@ -43,7 +43,7 @@ eval_on_test: True
 model_type: 'MultiTask_S3AI_Chem'
 model_parameters:
   esm_hidden_dim: 640
-  max_Ag_len: 210
+  max_Ab_len: 250
   max_Ag_len: 250
   virus_name: 'SARSCOV2'
 

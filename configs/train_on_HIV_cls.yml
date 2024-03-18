@@ -37,7 +37,7 @@ eval_on_test: False
 model_type: 'Cls_S3AI_Chem'
 model_parameters:
   max_Ag_len: 700
-  max_Ag_len: 230
+  max_Ab_len: 230
   esm_hidden_dim: 640
   virus_name: 'HIV'
 
