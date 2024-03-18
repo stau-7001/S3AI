@@ -7,6 +7,7 @@ The official code repository of ["Interpretable antibody-antigen interaction pre
 - [Data](#data)
 - [Model inference](#model-inference)
 - [Model training](#model-training)
+- [Citation](#citation)
 - [License](#license)
 
 ## Overview
@@ -99,6 +100,17 @@ You will save a file in the format `inner_phi.npz`. This file stores the followi
 - **CDR_H:** Saves three tuples $(l, r)$ representing the positions of CDR-H1, CDR-H2, and CDR-H3 on the antibody sequence.
 - **CDR_L:** Saves three tuples $(l, r)$ representing the positions of CDR-L1, CDR-L2, and CDR-L3 on the antibody sequence.
 
+## Citation
+
+If you find this code or the models useful in your research, please cite:
+@article{liu2024interpretable,
+  title={Interpretable antibody-antigen interaction prediction by bridging structure to sequence},
+  author={Liu, Yutian and Nie, Zhiwei and Chen, Jie and Zheng, Xinhao and Fu, Jie and Liu, Zhihong and Liu, Xudong and Xu, Fan and Huang, Xiansong and Zhang, Wen-Bin and others},
+  journal={bioRxiv},
+  pages={2024--03},
+  year={2024},
+  publisher={Cold Spring Harbor Laboratory}
+}
 ## License
 
 This project is licensed under the [MIT License](LICENSE).
