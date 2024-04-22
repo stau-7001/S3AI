@@ -1,5 +1,5 @@
 # S3AI
-The official code repository of ["Interpretable antibody-antigen interaction prediction by bridging structure to sequence"](https://www.biorxiv.org/content/10.1101/2024.03.09.584264v1).
+The official code repository of ["Interpretable antibody-antigen interaction prediction by introducing route and priors guidance"](https://www.biorxiv.org/content/10.1101/2024.03.09.584264v1).
 ![Our pipeline](./figs/fig1-v2.png)
 ## Table of Contents
 - [Overview](#overview)
