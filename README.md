@@ -61,6 +61,8 @@ python main.py --config=configs/train_on_sarscov2.yml
 python main.py --config=configs/train_on_HIV_cls.yml
 python main.py --config=configs/train_on_HIV_reg.yml
 ```
+### Customizing for Other Antigens
+If you want to train or infer on other types of antigens, you may need to modify the rule-based code in the model that handles antigen core-domain recognition. 
 
 ## Attribution evaluation
 
